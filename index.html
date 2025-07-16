@@ -256,6 +256,13 @@
                 if (response.ok) {
                     displayMessage('Thanks for signing up! Check your inbox for a welcome email.', 'success');
                     newsletterForm.reset(); // Clear the form fields
+
+                    // --- NEW CODE HERE: Close window after 5 seconds ---
+                    setTimeout(() => {
+                        closeSqueezePage(); // Call the function to hide the squeeze page
+                    }, 5000); // 5000 milliseconds = 5 seconds
+                    // --- END NEW CODE ---
+
                 } else {
                     const data = await response.json(); // Get error message from Formspree
                     displayMessage(`Error: ${data.errors ? data.errors[0].message : 'Something went wrong.'}`, 'error');
@@ -278,10 +285,9 @@
                 confirmationMessage.style.color = '#2b6cb0'; // Blue for info
             }
 
-            // Hide message after a few seconds
-            setTimeout(() => {
-                confirmationMessage.className = '';
-            }, 5000);
+            // Message will be very brief as the page redirects, but useful for quick feedback.
+            // (Note: With AJAX submission, the message remains until cleared or hidden)
+            // Removed previous setTimeout here as it conflicts with the new auto-close.
         }
 
         // Function to close the squeeze page within the iframe
