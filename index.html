@@ -33,6 +33,24 @@
             transform: translateY(30px); /* Start slightly below for animation */
             animation: fadeInSlideUp 1s ease-out forwards;
             box-sizing: border-box; /* Ensures padding/border included in width/height */
+            position: relative; /* Needed for positioning the close button */
+        }
+
+        /* Close Button */
+        .close-btn {
+            position: absolute;
+            top: 15px; /* Adjusted from 8px for better spacing */
+            right: 20px; /* Adjusted from 15px for better spacing */
+            font-size: 24px; /* Larger 'x' for better visibility */
+            color: #888;
+            cursor: pointer;
+            line-height: 1; /* Ensures 'x' is centered vertically */
+            padding: 5px; /* Makes clickable area larger */
+            transition: color 0.2s ease;
+        }
+
+        .close-btn:hover {
+            color: #555;
         }
 
         /* Heading */
@@ -171,6 +189,8 @@
 <body>
 
     <div class="squeeze-container">
+        <span class="close-btn" onclick="closeSqueezePage()">&times;</span>
+
         <h1>Unlock Exclusive Insights!</h1>
         <p>Join our newsletter community to get the latest updates, special offers, and expert tips delivered directly to your inbox. Don't miss out on what's next!</p>
 
@@ -190,6 +210,7 @@
         const emailInput = document.getElementById('emailInput');
         const phoneInput = document.getElementById('phoneInput');
         const confirmationMessage = document.getElementById('confirmationMessage');
+        const squeezeContainer = document.querySelector('.squeeze-container'); // Get the container itself
 
         newsletterForm.addEventListener('submit', function(event) {
             event.preventDefault(); // Stop default form submission for client-side validation
@@ -237,6 +258,16 @@
             setTimeout(() => {
                 confirmationMessage.className = '';
             }, 5000);
+        }
+
+        // Function to close the squeeze page within the iframe
+        function closeSqueezePage() {
+            // This will visually hide the squeeze page content within the iframe
+            squeezeContainer.style.opacity = '0';
+            squeezeContainer.style.transform = 'translateY(30px)'; // Reverse animation
+            // Optionally, you might make the iframe disappear or redirect the parent page
+            // but this requires cross-origin communication which is more complex.
+            // For now, this makes the content disappear within the iframe.
         }
     </script>
 
