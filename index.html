@@ -34,6 +34,7 @@
             animation: fadeInSlideUp 1s ease-out forwards;
             box-sizing: border-box; /* Ensures padding/border included in width/height */
             position: relative; /* Needed for positioning the close button */
+            transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out; /* Add transition for close animation */
         }
 
         /* Close Button */
@@ -278,25 +279,27 @@
             confirmationMessage.className = 'show'; // Show the message
 
             if (type === 'success') {
-                confirmationMessage.style.color = '#2f855a'; // Green for success
+                confirmationMessage.style.color = '#2f855a';
             } else if (type === 'error') {
-                confirmationMessage.style.color = '#e53e3e'; // Red for error
+                confirmationMessage.style.color = '#e53e3e';
             } else if (type === 'info') {
                 confirmationMessage.style.color = '#2b6cb0'; // Blue for info
             }
 
-            // Message will be very brief as the page redirects, but useful for quick feedback.
-            // (Note: With AJAX submission, the message remains until cleared or hidden)
-            // Removed previous setTimeout here as it conflicts with the new auto-close.
+            // Message will remain visible until closeSqueezePage() is called or manually hidden
         }
 
         // Function to close the squeeze page within the iframe
         function closeSqueezePage() {
-            // This will visually hide the squeeze page content within the iframe
+            // Initiate the fade-out and slide-down animation
             squeezeContainer.style.opacity = '0';
-            squeezeContainer.style.transform = 'translateY(30px)'; // Reverse animation
-            // You might also want to hide the iframe itself in the parent Hostinger page,
-            // but this is typically done on the Hostinger side if their builder allows it.
+            squeezeContainer.style.transform = 'translateY(30px)';
+
+            // After the animation completes (0.5 seconds), set display to 'none'
+            // to completely remove it from the layout within the iframe.
+            setTimeout(() => {
+                squeezeContainer.style.display = 'none';
+            }, 500); // This delay should match the transition duration in CSS
         }
     </script>
 
