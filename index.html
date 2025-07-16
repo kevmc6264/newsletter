@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unlock Exclusive Insights - Join Our Newsletter!</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Basic Reset & Body Styling */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f0f4f8 0%, #d9e2ec 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: #334e68;
+            overflow: hidden; /* Prevent scrollbar during initial animation */
+        }
+
+        /* Squeeze Page Container */
+        .squeeze-container {
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            text-align: center;
+            max-width: 550px;
+            width: 90%;
+            opacity: 0; /* Hidden initially for animation */
+            transform: translateY(30px); /* Start slightly below for animation */
+            animation: fadeInSlideUp 1s ease-out forwards;
+            box-sizing: border-box; /* Ensures padding/border included in width/height */
+        }
+
+        /* Heading */
+        h1 {
+            font-size: 2.5em;
+            color: #2b6cb0; /* Deep blue */
+            margin-bottom: 15px;
+            line-height: 1.2;
+            font-weight: 700;
+        }
+
+        /* Paragraph Text */
+        p {
+            font-size: 1.1em;
+            margin-bottom: 30px;
+            line-height: 1.6;
+            color: #52667b;
+            font-weight: 400;
+        }
+
+        /* Form Styling */
+        .newsletter-form {
+            display: flex;
+            flex-direction: column; /* Stack fields vertically */
+            gap: 15px; /* Space between fields */
+            align-items: center;
+        }
+
+        /* Input Fields */
+        .newsletter-form input[type="text"],
+        .newsletter-form input[type="email"],
+        .newsletter-form input[type="tel"] {
+            width: 100%; /* Full width within the form */
+            padding: 15px 20px;
+            border: 1px solid #cbd5e0;
+            border-radius: 8px;
+            font-size: 1em;
+            box-sizing: border-box;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .newsletter-form input:focus {
+            outline: none;
+            border-color: #2b6cb0;
+            box-shadow: 0 0 0 3px rgba(43, 108, 176, 0.2);
+        }
+
+        /* Submit Button */
+        .newsletter-form button {
+            background-color: #38a169; /* Green for action */
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 4px 12px rgba(56, 161, 105, 0.3);
+            width: 100%;
+            max-width: 250px;
+        }
+
+        .newsletter-form button:hover {
+            background-color: #2f855a; /* Darker green on hover */
+            transform: translateY(-2px); /* Subtle lift effect */
+            box-shadow: 0 6px 15px rgba(56, 161, 105, 0.4);
+        }
+
+        .newsletter-form button:active {
+            transform: translateY(0); /* Press effect */
+        }
+
+        /* Confirmation Message */
+        #confirmationMessage {
+            margin-top: 25px;
+            font-size: 1em;
+            color: #2f855a;
+            font-weight: 600;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        #confirmationMessage.show {
+            opacity: 1;
+        }
+
+        /* Animations */
+        @keyframes fadeInSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 600px) {
+            .squeeze-container {
+                padding: 30px 20px;
+                border-radius: 8px;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            p {
+                font-size: 1em;
+            }
+
+            .newsletter-form input,
+            .newsletter-form button {
+                padding: 12px 15px;
+                font-size: 1em;
+            }
+        }
+
+        @media (max-width: 400px) {
+            h1 {
+                font-size: 1.7em;
+            }
+            p {
+                font-size: 0.9em;
+            }
+            .newsletter-form button {
+                width: 100%;
+                max-width: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="squeeze-container">
+        <h1>Unlock Exclusive Insights!</h1>
+        <p>Join our newsletter community to get the latest updates, special offers, and expert tips delivered directly to your inbox. Don't miss out on what's next!</p>
+
+        <form id="newsletterForm" class="newsletter-form" action="https://formspree.io/f/xanbyvzv" method="POST">
+            <input type="text" id="nameInput" placeholder="Your Name" required>
+            <input type="email" id="emailInput" placeholder="Your Best Email Address" required>
+            <input type="tel" id="phoneInput" placeholder="Your Phone Number (Optional)">
+            <button type="submit">Sign Me Up!</button>
+        </form>
+
+        <div id="confirmationMessage" aria-live="polite"></div>
+    </div>
+
+    <script>
+        const newsletterForm = document.getElementById('newsletterForm');
+        const nameInput = document.getElementById('nameInput');
+        const emailInput = document.getElementById('emailInput');
+        const phoneInput = document.getElementById('phoneInput');
+        const confirmationMessage = document.getElementById('confirmationMessage');
+
+        newsletterForm.addEventListener('submit', function(event) {
+            event.preventDefault(); // Stop default form submission for client-side validation
+
+            const name = nameInput.value.trim();
+            const email = emailInput.value.trim();
+            const phone = phoneInput.value.trim();
+
+            // Client-side validation checks
+            if (!name) {
+                displayMessage('Please enter your name.', 'error');
+                return;
+            }
+
+            if (!email) {
+                displayMessage('Please enter your email address.', 'error');
+                return;
+            }
+
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                displayMessage('Please enter a valid email address.', 'error');
+                return;
+            }
+
+            // If all validation passes, manually submit the form to Formspree.
+            // This will send the data and redirect the user to Formspree's default success page.
+            displayMessage('Signing up...', 'info'); // Optional: show a quick loading message
+            newsletterForm.submit(); // This line sends the data to the Formspree URL
+        });
+
+        function displayMessage(message, type) {
+            confirmationMessage.textContent = message;
+            confirmationMessage.className = 'show';
+
+            if (type === 'success') {
+                confirmationMessage.style.color = '#2f855a';
+            } else if (type === 'error') {
+                confirmationMessage.style.color = '#e53e3e';
+            } else if (type === 'info') {
+                confirmationMessage.style.color = '#2b6cb0'; // Blue for info
+            }
+
+            // Message will be very brief as the page redirects, but useful for quick feedback.
+            setTimeout(() => {
+                confirmationMessage.className = '';
+            }, 5000);
+        }
+    </script>
+
+</body>
+</html>
