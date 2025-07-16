@@ -39,18 +39,18 @@
         /* Close Button */
         .close-btn {
             position: absolute;
-            top: 15px; /* Adjusted from 8px for better spacing */
-            right: 20px; /* Adjusted from 15px for better spacing */
-            font-size: 24px; /* Larger 'x' for better visibility */
-            color: #888;
-            cursor: pointer;
-            line-height: 1; /* Ensures 'x' is centered vertically */
-            padding: 5px; /* Makes clickable area larger */
-            transition: color 0.2s ease;
+            top: 15px; /* Position from top */
+            right: 20px; /* Position from right */
+            font-size: 24px; /* Size of the 'x' */
+            color: #888; /* Color of the 'x' */
+            cursor: pointer; /* Changes cursor to a pointer on hover */
+            line-height: 1; /* Ensures 'x' is vertically centered */
+            padding: 5px; /* Increases clickable area around 'x' */
+            transition: color 0.2s ease; /* Smooth color change on hover */
         }
 
         .close-btn:hover {
-            color: #555;
+            color: #555; /* Darker color on hover */
         }
 
         /* Heading */
@@ -194,7 +194,7 @@
         <h1>Unlock Exclusive Insights!</h1>
         <p>Join our newsletter community to get the latest updates, special offers, and expert tips delivered directly to your inbox. Don't miss out on what's next!</p>
 
-        <form id="newsletterForm" class="newsletter-form" action="https://formspree.io/f/xanbyvzv" method="POST">
+        <form id="newsletterForm" class="newsletter-form">
             <input type="text" id="nameInput" placeholder="Your Name" required>
             <input type="email" id="emailInput" placeholder="Your Best Email Address" required>
             <input type="tel" id="phoneInput" placeholder="Your Phone Number (Optional)">
@@ -212,8 +212,8 @@
         const confirmationMessage = document.getElementById('confirmationMessage');
         const squeezeContainer = document.querySelector('.squeeze-container'); // Get the container itself
 
-        newsletterForm.addEventListener('submit', function(event) {
-            event.preventDefault(); // Stop default form submission for client-side validation
+        newsletterForm.addEventListener('submit', async function(event) {
+            event.preventDefault(); // Stop default form submission
 
             const name = nameInput.value.trim();
             const email = emailInput.value.trim();
@@ -236,25 +236,49 @@
                 return;
             }
 
-            // If all validation passes, manually submit the form to Formspree.
-            // This will send the data and redirect the user to Formspree's default success page.
-            displayMessage('Signing up...', 'info'); // Optional: show a quick loading message
-            newsletterForm.submit(); // This line sends the data to the Formspree URL
+            displayMessage('Signing up...', 'info'); // Show loading message
+
+            try {
+                // Use Formspree's AJAX endpoint and send data as JSON
+                const response = await fetch('https://formspree.io/f/xanbyvzv', { // <-- YOUR FORMSPREE URL HERE
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json', // Tell Formspree we're sending JSON
+                        'Accept': 'application/json' // Tell Formspree we expect JSON back
+                    },
+                    body: JSON.stringify({ // Convert form data to JSON string
+                        name: name,
+                        email: email,
+                        phone: phone
+                    })
+                });
+
+                if (response.ok) {
+                    displayMessage('Thanks for signing up! Check your inbox for a welcome email.', 'success');
+                    newsletterForm.reset(); // Clear the form fields
+                } else {
+                    const data = await response.json(); // Get error message from Formspree
+                    displayMessage(`Error: ${data.errors ? data.errors[0].message : 'Something went wrong.'}`, 'error');
+                }
+            } catch (error) {
+                console.error('Submission error:', error);
+                displayMessage('Oops! Network error. Please try again later.', 'error');
+            }
         });
 
         function displayMessage(message, type) {
             confirmationMessage.textContent = message;
-            confirmationMessage.className = 'show';
+            confirmationMessage.className = 'show'; // Show the message
 
             if (type === 'success') {
-                confirmationMessage.style.color = '#2f855a';
+                confirmationMessage.style.color = '#2f855a'; // Green for success
             } else if (type === 'error') {
-                confirmationMessage.style.color = '#e53e3e';
+                confirmationMessage.style.color = '#e53e3e'; // Red for error
             } else if (type === 'info') {
                 confirmationMessage.style.color = '#2b6cb0'; // Blue for info
             }
 
-            // Message will be very brief as the page redirects, but useful for quick feedback.
+            // Hide message after a few seconds
             setTimeout(() => {
                 confirmationMessage.className = '';
             }, 5000);
@@ -265,9 +289,8 @@
             // This will visually hide the squeeze page content within the iframe
             squeezeContainer.style.opacity = '0';
             squeezeContainer.style.transform = 'translateY(30px)'; // Reverse animation
-            // Optionally, you might make the iframe disappear or redirect the parent page
-            // but this requires cross-origin communication which is more complex.
-            // For now, this makes the content disappear within the iframe.
+            // You might also want to hide the iframe itself in the parent Hostinger page,
+            // but this is typically done on the Hostinger side if their builder allows it.
         }
     </script>
 
